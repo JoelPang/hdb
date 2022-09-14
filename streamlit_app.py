@@ -10,23 +10,19 @@ plt.rcParams["figure.dpi"] = 80
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.sans-serif'] = ['Montserrat']
 
+# =============================================================================
+# HDB Fair Price Calculator - JP 2021
+# =============================================================================
 
-# https://daniellewisdl-streamlit-cheat-sheet-app-ytm9sg.streamlitapp.com/
-
-
-st.set_page_config(page_icon="📈", page_title="HDB Fair Value Calculator")
-
-
-st.header("""**HDB Fair Value Calculator**\nDesc""")
+st.set_page_config(page_icon="🏙️", page_title="HDB Fair Value Calculator")
+st.header("""**HDB Fair Value Calculator**""")
 
 
 file_list = glob.glob("./data/*.csv")
-
 df = pd.concat([pd.read_csv(file) for file in file_list])
 df['time'] = pd.to_datetime( df['time'] )
 
 PROJECT_LIST = sorted(df['full_name'].unique())
-
 
 form = st.form(key="submit-form")
 project = form.selectbox('project', PROJECT_LIST)
@@ -35,7 +31,7 @@ size = form.number_input("size", min_value=1, max_value=10000, value=1000, step=
 price = form.number_input("Asking price", min_value=1, max_value=10_000_000, value=500000, step=1000)
 generate = form.form_submit_button("Generate")
 
-
+# =============================================================================
 
 def load_project(df, project):
     pdf = df[ df['full_name']==project ].dropna().sort_values('time', ascending=False)
@@ -50,8 +46,6 @@ def plot_project_block_avg(pdf):
     plt.xlabel('Size (sqft)')
     plt.ylabel('Block')
     plt.show()
-
-
 
 def MLR_predict(df, group_name, storey_mid, size_sqft, asking_price, print_stats=False):
     feature_cols = ['lease_years', 'days_ago', 'storey_mid', 'size_sqft']
@@ -81,13 +75,7 @@ def MLR_predict(df, group_name, storey_mid, size_sqft, asking_price, print_stats
         print(model.summary())
 
     cost_psf = res[0][0]
-    pred_total_cost = cost_psf*size_sqft
     asking_psf = asking_price / size_sqft
-
-    print(f"{group_name} | Storey: {storey_mid} | Size: {size_sqft} sqft | Asking price: ${asking_price:,.0f}")
-    print(f"Predicted Cost PSF: {cost_psf:.0f}")
-    print(f"Predicted Total Cost: ${pred_total_cost:,.0f}")
-    print(f"Premium: ${asking_price-pred_total_cost:,.0f} ({asking_price/pred_total_cost-1:.2%})")
 
     xlabel_dict = {'lease_years': 'Lease Remaining',
                    'days_ago': 'Days Ago',
@@ -116,6 +104,7 @@ def MLR_predict(df, group_name, storey_mid, size_sqft, asking_price, print_stats
 
     return cost_psf
 
+# =============================================================================
 
 if generate:
     pdf = load_project(df, project)
@@ -138,10 +127,4 @@ if generate:
 
     st.text(output_text)
 
-
     st.image('output_image.png', output_format='png')
-
-
-
-
-
