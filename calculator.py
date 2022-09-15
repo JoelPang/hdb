@@ -13,6 +13,7 @@ plt.rcParams['font.sans-serif'] = ['Montserrat']
 
 # =============================================================================
 # HDB Fair Price Calculator - JP 2021
+# https://share.streamlit.io/joelpang/hdb/main/calculator.py
 # =============================================================================
 
 st.set_page_config(page_icon="🏙️", page_title="HDB Fair Value Calculator")
@@ -81,7 +82,7 @@ def check_project_year(projects):
     years = set([x[-4:] for x in projects])
     if len(years)>1:
         year_list = ", ".join(x for x in years)
-        st.text(f"Warning: Projects in {len(years)} different years selected - [{year_list}]\nResults may be inaccurate")
+        st.warning(f"Warning: Projects in {len(years)} different years selected - [{year_list}] - results may be inaccurate")
 
 def MLR_predict(df, projects, storey_mid, size_sqft, asking_price, print_stats=False):
     feature_cols = ['lease_years', 'storey_mid', 'size_sqft']
@@ -185,6 +186,5 @@ if generate:
             st.text(f"Wa {size} sqft you sure this one HDB or not?")
         if size<200:
             st.text(f"This one square feet not squre metres leh. You sure only {size} sqft?")
-
     else:
         st.text("You trying to be cute is it? No project how to analyze?")
