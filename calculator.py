@@ -77,6 +77,17 @@ def find_days_to_expiry(df):
     return res
 
 
+def get_lease_years_remaining(pdf):
+    # Infer from latest
+    last_trx_time = pdf['time'].max()
+    ldf = pdf[pdf['time']==last_trx_time][['time','lease_years']]
+    last_lease_years = ldf.groupby('time')['lease_years'].mean().values[0]
+    time_elapsed = dt.datetime.today()-last_trx_time
+    years_elapsed = (time_elapsed.days/365)
+    lease_years_remaining = last_lease_years - years_elapsed
+    return min(lease_years_remaining, pdf['lease_years'].min())
+
+
 def check_project_year(projects):
     years = set([x[-4:] for x in projects])
     if len(years)>1:
@@ -84,7 +95,7 @@ def check_project_year(projects):
         st.warning(f"Warning: Projects in {len(years)} different years selected - [{year_list}] - results may be inaccurate")
 
 
-def MLR_predict(df, projects, storey_mid, size_sqft, asking_price, print_stats=False):
+def MLR_predict(df, projects, storey_mid, size_sqft, asking_price):
     feature_cols = ['lease_years', 'storey_mid', 'size_sqft']
     X = df[feature_cols]
     Y = df[['cost_psf']]
@@ -92,29 +103,20 @@ def MLR_predict(df, projects, storey_mid, size_sqft, asking_price, print_stats=F
     regr = linear_model.LinearRegression()
     regr.fit(X, Y)
 
-    if print_stats:
-        print('Intercept: \n', regr.intercept_)
-        print('Coefficients: \n', regr.coef_)
-
-    df['pred'] = regr.predict(X)
-    df['actual'] = Y
-
     dte = find_days_to_expiry(df)
     project_expiry = dt.datetime.today() + dt.timedelta(days=dte)
     current_lease_years = dte/365.25
+    # Try different method
+    current_lease_years = get_lease_years_remaining(pdf)
 
     res = regr.predict([[current_lease_years, storey_mid, size_sqft]])
-    inputs = {'lease_years': current_lease_years,
-              'storey_mid': storey_mid,
-              'size_sqft': size_sqft}
-
-    if print_stats:
-        X = sm.add_constant(X)
-        model = sm.OLS(Y, X).fit()
-        print(model.summary())
 
     cost_psf = res[0][0]
     asking_psf = asking_price / size_sqft
+
+    inputs = {'lease_years': current_lease_years,
+              'storey_mid': storey_mid,
+              'size_sqft': size_sqft}
 
     xlabel_dict = {'lease_years': 'Lease Remaining',
                    'storey_mid': 'Storey',
