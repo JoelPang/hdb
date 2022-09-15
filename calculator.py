@@ -46,8 +46,8 @@ def print_project_stats(pdf):
     towns = sorted(list(pdf['town'].unique()))
     blocks = sorted(list(pdf['block'].unique()))
     projects = sorted(list(pdf['full_name'].unique()))
-    stats = {'Towns': ", ".join(x for x in towns),
-             'Projects': ", ".join(x for x in projects),
+    stats = {'Town': ", ".join(x for x in towns),
+             'Project': ", ".join(x for x in projects),
              'Blocks': ", ".join(x for x in blocks),
              'Sample size': len(pdf),
              'First transaction': pdf['time'].min().strftime("%Y-%m"),
@@ -160,8 +160,8 @@ if generate:
         asking_psf = price / size
 
         output_text = ""
-        output_text += f"Projects: {stats['Projects']}"
-        output_text += f"\nTowns: {stats['Towns']}"
+        output_text += f"Project: {stats['Project']}"
+        output_text += f"\nTown: {stats['Town']}"
         output_text += f"\nBlocks: {stats['Blocks']}"
         output_text += "\n"
         output_text += f"\nStorey: {storey}"
