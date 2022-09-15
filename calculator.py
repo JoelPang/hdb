@@ -16,9 +16,8 @@ plt.rcParams['font.sans-serif'] = ['Montserrat']
 # https://share.streamlit.io/joelpang/hdb/main/calculator.py
 # =============================================================================
 
-st.set_page_config(page_icon="🏙️", page_title="HDB Fair Value Calculator")
+st.set_page_config(page_icon="🏙️", page_title="HDB Fair Value Calculator", layout='centered')
 st.header("""**HDB Fair Value Calculator**""")
-
 
 file_list = glob.glob("./data/*.csv")
 df = pd.concat([pd.read_csv(file) for file in file_list])
@@ -84,6 +83,7 @@ def check_project_year(projects):
         year_list = ", ".join(x for x in years)
         st.warning(f"Warning: Projects in {len(years)} different years selected - [{year_list}] - results may be inaccurate")
 
+
 def MLR_predict(df, projects, storey_mid, size_sqft, asking_price, print_stats=False):
     feature_cols = ['lease_years', 'storey_mid', 'size_sqft']
     X = df[feature_cols]
@@ -140,6 +140,7 @@ def MLR_predict(df, projects, storey_mid, size_sqft, asking_price, print_stats=F
     plt.suptitle(", ".join(x for x in projects), fontsize=20)
     plt.savefig("output_image.png", dpi=200, bbox_inches='tight', pad_inches=0.3)
     return cost_psf
+
 
 # =============================================================================
 
