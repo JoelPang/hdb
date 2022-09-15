@@ -28,8 +28,8 @@ PROJECT_LIST = sorted(df['full_name'].unique())
 form = st.form(key="submit-form")
 # project = form.selectbox('project', PROJECT_LIST)
 projects = form.multiselect('Projects', PROJECT_LIST)
-storey = form.number_input("Storey", min_value=1, max_value=600, value=10, step=1)
-size = form.number_input("Size", min_value=1, max_value=10000, value=1000, step=10)
+storey = form.number_input("Storey", min_value=1, max_value=128, value=10, step=1)
+size = form.number_input("Size (sqft)", min_value=1, max_value=10000, value=900, step=10)
 price = form.number_input("Asking price", min_value=1, max_value=10_000_000, value=500000, step=1000)
 generate = form.form_submit_button("Generate")
 
@@ -183,6 +183,8 @@ if generate:
             st.text(f"Huh ${price/1e6:.1f} million?! You wanna pay so much meh??")
         if size>3000:
             st.text(f"Wa {size} sqft you sure this one HDB or not?")
+        if size<200:
+            st.text(f"This one square feet not squre metres leh. You sure only {size} sqft?")
 
     else:
         st.text("You trying to be cute is it? No project how to analyze?")
