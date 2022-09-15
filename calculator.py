@@ -27,8 +27,8 @@ df['time'] = pd.to_datetime( df['time'] )
 PROJECT_LIST = sorted(df['full_name'].unique())
 
 form = st.form(key="submit-form")
-# project = form.selectbox('project', PROJECT_LIST)
-projects = form.multiselect('Projects', PROJECT_LIST)
+projects = [form.selectbox('HDB estate name and TOP year', PROJECT_LIST)]
+# projects = form.multiselect('Projects', PROJECT_LIST)
 storey = form.number_input("Storey", min_value=1, max_value=128, value=10, step=1)
 size = form.number_input("Size (sqft)", min_value=1, max_value=10000, value=900, step=10)
 price = form.number_input("Asking price", min_value=1, max_value=10_000_000, value=500000, step=1000)
@@ -188,3 +188,5 @@ if generate:
             st.text(f"This one square feet not squre metres leh. You sure only {size} sqft?")
     else:
         st.text("You trying to be cute is it? No project how to analyze?")
+
+st.caption("Data from data.gov.sg")
