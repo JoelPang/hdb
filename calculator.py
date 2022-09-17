@@ -13,6 +13,7 @@ plt.rcParams['font.sans-serif'] = ['Montserrat']
 # =============================================================================
 # HDB Fair Price Calculator - JP 2021
 # https://share.streamlit.io/joelpang/hdb/main/calculator.py
+# https://tinyurl.com/hdb-calculator
 # =============================================================================
 
 st.set_page_config(page_icon="🏙️", page_title="HDB Fair Value Calculator", layout='centered')
