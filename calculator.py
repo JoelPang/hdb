@@ -3,7 +3,6 @@ import pandas as pd
 import datetime as dt
 import glob
 from sklearn import linear_model
-import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import seaborn as sns
 plt.style.use('dark_background')
@@ -31,7 +30,7 @@ projects = [form.selectbox('HDB estate name and TOP year', PROJECT_LIST)]
 storey = form.number_input("Storey", min_value=1, max_value=128, value=10, step=1)
 size = form.number_input("Size (sqft)", min_value=1, max_value=10000, value=900, step=10)
 price = form.number_input("Asking price", min_value=1, max_value=10_000_000, value=500000, step=1000)
-generate = form.form_submit_button("Generate")
+calculate = form.form_submit_button("Calculate")
 
 # =============================================================================
 
@@ -146,7 +145,7 @@ def MLR_predict(df, projects, storey_mid, size_sqft, asking_price):
 
 # =============================================================================
 
-if generate:
+if calculate:
     if len(projects)>0:
 
         check_project_year(projects)
@@ -193,3 +192,4 @@ if generate:
         st.text("You trying to be cute is it? No project how to analyze?")
 
 st.caption("Data from data.gov.sg")
+st.caption("Feedback: [Twitter](https://twitter.com/ALT_QNT), [Reddit](https://www.reddit.com/user/joelpang), or good old [email](mailto:joel.pang@outlook.com)")
