@@ -193,4 +193,4 @@ if calculate:
         st.text("You trying to be cute is it? No project how to analyze?")
 
 st.caption("Data from data.gov.sg")
-st.caption("Feedback: [Twitter](https://twitter.com/ALT_QNT), [Reddit](https://www.reddit.com/user/joelpang), or good old [email](mailto:joel.pang@outlook.com) <- (Anyone knows how to change the colour of the links please contact me thanks!)")
+st.caption("Feedback: [Twitter](https://twitter.com/ALT_QNT), [Reddit](https://www.reddit.com/user/joelpang), or good old [email](mailto:joel.pang@outlook.com)")
